@@ -63,7 +63,7 @@
 import { mapGetters } from "vuex";
 import commonUrl from "../../utils/common";
 import qs from "qs";
-import { setTimeout } from 'timers';
+import { setTimeout } from "timers";
 export default {
   name: "Dashboard",
   data() {
@@ -81,6 +81,7 @@ export default {
   created() {
     // 初始化数据
     this.getData();
+    console.log(this.getYestoday());
   },
   computed: {
     ...mapGetters(["name", "roles"])
@@ -150,7 +151,6 @@ export default {
         _param2
       );
 
-
       Promise.all([_promise1, _promise2])
         .then(res => {
           let [res1, res2] = res;
@@ -160,23 +160,23 @@ export default {
             let result = res1.data.data;
             if (result.agentVirtualEarnings) {
               this.yesterday_virtualamount =
-                result.agentVirtualEarnings.amount + "贝壳";
+                result.agentVirtualEarnings.virtualAmount + "贝壳";
             }
             if (result.agentAccountEarnings) {
               this.yesterday_accountamount =
-                result.agentAccountEarnings.amount / 100 + "元";
+                result.agentAccountEarnings.accountAmount  + "元";
             }
-          }else{
+          } else {
             // setTimeout(()=>{this.m_message(res1.data.msg, "warning");},1)
           }
           console.log(res2);
           // 上月收益
           if (res2.data.code == "0000") {
-            let result = res2.data.data.agentAccount
-            this.lastMonth_virtualamount = result.virtual_month_total + '贝壳'
-            this.lastMonth_accountamount = result.account_month_total / 100 + '元'
-
-          }else{
+            let result = res2.data.data.agentAccount;
+            this.lastMonth_virtualamount = result.virtualMonthTotal + "贝壳";
+            this.lastMonth_accountamount =
+              result.accountMonthTotal + "元";
+          } else {
             //  setTimeout(()=>{this.m_message(res2.data.msg, "warning");},1)
           }
 
@@ -193,7 +193,7 @@ export default {
           ? "0" + (day1.getMonth() + 1)
           : day1.getMonth() + 1;
       var _date = day1.getDate() < 10 ? "0" + day1.getDate() : day1.getDate();
-      var s1 = day1.getFullYear() + _month + _date;
+      var s1 = day1.getFullYear() + ''+ _month + ''+_date;
       return s1;
     },
     // 获取 上月

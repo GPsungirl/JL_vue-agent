@@ -1,20 +1,20 @@
-<template>    
+<template>
     <!-- 贝壳收益 页面 -->
     <div class="pad_5">
-        <!-- M1 查询区域 -->          
+        <!-- M1 查询区域 -->
         <div class="query_fields pad_b_no handle_timerange">
             <el-form :inline="true" :model="queryForm" ref="queryForm" size="mini" class="demo-form-inline">
                 <!-- 收益类型 -->
                 <!-- <el-form-item label="收益类型" prop="virtual_class" label-width="68px">
                     <el-select v-model="queryForm.virtual_class" placeholder="请选择收益类型">
-                    <el-option 
+                    <el-option
                         v-for="(item, index) of queryForm.virtual_classs"
                         :key="index"
                         :label="item.value"
                         :value="item.id"
                         >
                     </el-option>
-                    </el-select>                
+                    </el-select>
                 </el-form-item>   -->
                 <!-- 所属市级机构 -->
                 <!-- <el-form-item label="所属市级机构" prop="city_agent_name" label-width="100px">
@@ -27,14 +27,14 @@
                 <!-- 入账状态 -->
                 <!-- <el-form-item label="入账状态" prop="virtual_profit_cityagent_status" label-width="68px">
                     <el-select v-model="queryForm.virtual_profit_cityagent_status" placeholder="请选择入账状态">
-                    <el-option 
+                    <el-option
                         v-for="(item, index) of queryForm.virtual_profit_cityagent_statuss"
                         :key="index"
                         :label="item.value"
                         :value="item.id"
                         >
                     </el-option>
-                    </el-select>                
+                    </el-select>
                 </el-form-item> -->
                 <!-- 出行时间 -->
                 <!-- <el-form-item label="收益时间" prop="allTime">
@@ -49,49 +49,59 @@
                 </el-form-item>                                    -->
                 <!-- 查询 -->
                 <el-form-item>
-                    <!-- <el-button type="primary" size='mini' @click="queryData">查询</el-button>                  
+                    <!-- <el-button type="primary" size='mini' @click="queryData">查询</el-button>
                     <el-button type="success" size='mini' @click="resetData('queryForm')">重置</el-button>                   -->
-                    <el-button type="primary" size='mini' @click="handle_refresh">刷新</el-button>                  
-                                        
+                    <el-button type="primary" size='mini' @click="handle_refresh">刷新</el-button>
+
                 </el-form-item>
             </el-form>
         </div>
         <!-- M2 主列表1-->
         <div>
             <h5 class="table_title">账户信息</h5>
-            <!-- 收益数据表格 -->                       
+            <!-- 收益数据表格 -->
             <el-table :data="tableData_account" v-loading="tableLoading_account" border stripe style="width: 100%">
                 <!-- 开户名 -->
-                <el-table-column prop="account_user" label="开户名" width="" >                                       
+                <el-table-column prop="account_user" label="开户名" width="" >
                 </el-table-column>
                 <!-- 开户行 -->
                 <el-table-column prop="account_bank" label="开户行" width="">
                 </el-table-column>
                 <!-- 银行账号 account_no-->
                 <el-table-column prop="account_no" label="银行账号" width="">
-                    
+
                 </el-table-column>
-                <!-- 开户地 -->                
+                <!-- 开户地 -->
                 <el-table-column prop="" label="开户地" width="">
                     <template slot-scope="scope">
                         {{ scope.row.account_province  + scope.row.account_city}}
                     </template>
                 </el-table-column>
-                
+
             </el-table>
         </div>
         <!-- M2 主列表2 -->
-        <div>         
-            <h5 class="table_title">收益信息</h5>              
-            <!-- 收益数据表格 -->                       
+        <div>
+            <h5 class="table_title">收益信息</h5>
+            <!-- 收益数据表格 -->
             <el-table :data="tableData" v-loading="tableLoading" border stripe style="width: 100%">
-                <!-- 收益金额 -->
-                <el-table-column prop="total_amont" label="收益金额" width="" >                                       
+
+                <!-- 贝壳收益 -->
+                <el-table-column prop="virtualMonthTotal" label="贝壳收益(元)" width="" >
+                </el-table-column>
+                <!-- 出行收益 -->
+                <el-table-column prop="accountMonthTotal" label="出行收益(元)" width="" >
+                </el-table-column>
+                <!-- 总收益 -->
+                <el-table-column prop="totalAmont" label="收益金额" width="" >
+                  <!-- <template slot-scope="scope">
+                    <span>{{ scope.row.virtualMonthTotal + scope.row.accountMonthTotal }}</span>
+                  </template> -->
                 </el-table-column>
                 <!-- 收益周期 -->
                 <el-table-column prop="month" label="收益周期" width="">
                 </el-table-column>
-                <!-- 收益状态 -->                
+                <!-- 收益状态 -->
                 <el-table-column prop="revenue_status" show-overflow-tooltip label="收益状态" width="">
                     <template slot-scope="scope">
                         <!-- 1待开票2已开票3已发放4待发放5拒绝6数据错误 -->
@@ -103,20 +113,20 @@
                         <span v-else-if="scope.row.revenue_status == 6">数据错误</span>
                     </template>
                 </el-table-column>
-                
+
             </el-table>
             <!-- 分页 -->
-            <div class="block mar_t10">  
-                <el-pagination                
+            <div class="block mar_t10">
+                <el-pagination
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :total="pageTotal"                      
+                :total="pageTotal"
                 background
                 layout="total, prev, pager, next, jumper"
                 >
                 </el-pagination>
             </div>
-        </div>        
+        </div>
     </div>
 </template>
 <script>
@@ -125,13 +135,13 @@ import commonUrl from '../../utils/common';
 export default {
     name: 'proceedsCash',
     data(){
-        return {           
+        return {
             // 主列表
-            tableLoading:false,            
+            tableLoading:false,
             tableData:[],
-            tableLoading_account:false,            
+            tableLoading_account:false,
             tableData_account:[],
-            // 分页          
+            // 分页
             pageTotal: 0,
             currentPage:1,
             // 查询参数
@@ -183,38 +193,39 @@ export default {
                     }
                 ],
                 virtual_profit_cityagent_status:'',
-            },                       
+            },
         }
     },
     created(){
         // 初始化主列表
-        this.getTabelDataList(1)    
+        this.getTabelDataList(1)
     },
-    methods:{   
+    methods:{
         // 初始化主列表(收益信息 和 账户信息)
         getTabelDataList(pageNum){
             // 参数
             let param = {
-                data: {                    
-                    // 公有                    
+                data: {
+                    // 公有
                     signInUserId: this.$store.getters.userId,
                     // signInRoleId: this.$store.getters.roleId,
                     pageNum: pageNum,
-                    pageSize: 10,                                                        
+                    pageSize: 10,
                 }
             }
-            this.tableLoading = true               
+            this.tableLoading = true
             this.$http.post(`${ commonUrl.baseUrl }/agent/findByAgentAccount`, param).then(res=>{
-                
-                if(res.data.code == '0000'){  
+
+                if(res.data.code == '0000'){
+                    console.log(res)
                     // 收益信息
-                    this.tableData =  res.data.data.agentAccountList  
-                    
+                    this.tableData =  res.data.data.agentAccountList
+
                     // 账户信息
-                    this.tableData_account.push(res.data.data.agent)                                       
+                    this.tableData_account.push(res.data.data.agent)
                     // 分页 总数
                     this.pageTotal = res.data.data.page.pageTotal;
-                    // 关闭加载  
+                    // 关闭加载
                     this.tableLoading = false
                 }
             }).catch(err=>{})
@@ -231,8 +242,8 @@ export default {
                     // 公有
                     signInUserId: this.$store.getters.userId,
                     signInRoleId: this.$store.getters.roleId,
-                    
-                    // 私有                       
+
+                    // 私有
                     // 收益类型
                     virtual_class:this.queryForm.virtual_class,
                     // 所属市级机构
@@ -247,7 +258,7 @@ export default {
                     endTime:this.queryForm.endTime,
                 }
             }
-                                                
+
             this.$http.post(`${ commonUrl.baseUrl}/virtualProfit/exportVirtualProfit`, param).then(res=>{
                 if(res.data.code == '0000'){
                     this.m_message(res.data.msg, 'success')
@@ -257,13 +268,13 @@ export default {
         },
         // 查询按钮
         queryData(){
-            
+
             if(this.queryForm.allTime.length > 0){
                 // 修正 开始 和结束 时间
                 this.queryForm.startTime = this.queryForm.allTime[0]
                 this.queryForm.endTime = this.queryForm.allTime[1]
-            }            
-            
+            }
+
             this.getTabelDataList(1);
         },
         // 重置按钮
@@ -272,10 +283,10 @@ export default {
             // 对于queryForm 下拉
             this.queryForm.startTime = ''
             this.queryForm.endTime = ''
-        },                      
+        },
         // 分页
         handleCurrentChange(val){
-             this.currentPage = val       
+             this.currentPage = val
             // 获取单前页数据列表
             this.getTabelDataList(val);
             //console.log(`当前页: ${val}`);
@@ -287,7 +298,7 @@ export default {
                 type
             })
         },
-        
+
     }
 }
 </script>

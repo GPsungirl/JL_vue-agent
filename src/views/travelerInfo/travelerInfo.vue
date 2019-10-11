@@ -80,7 +80,7 @@
                     <el-input v-model="queryForm.up_name" placeholder="请输入上级姓名" class="wid_140"></el-input>
                 </el-form-item>
                 <!-- 上级ID -->
-                <el-form-item label="上级ID" prop="up_customid" label-width="68px">
+                <el-form-item label="上级ID" prop="up_customid" label-width="">
                     <el-input v-model="queryForm.up_customid" placeholder="请输入上级ID" class="wid_140"></el-input>
                 </el-form-item>
 

@@ -6,7 +6,7 @@
             <el-form :inline="true" :model="queryForm" ref="queryForm" size="mini" class="demo-form-inline">
                 <!-- 收益类型 -->
                 <el-form-item label="收益类型" prop="virtual_class" label-width="68px">
-                    <el-select v-model="queryForm.virtual_class" placeholder="请选择收益类型">
+                    <el-select v-model="queryForm.virtual_class" placeholder="请选择收益类型" class="wid_140">
                     <el-option
                         v-for="(item, index) of queryForm.virtual_classs"
                         :key="index"
@@ -17,10 +17,13 @@
                     </el-select>
                 </el-form-item>
                 <!-- 所属区级机构 -->
-                <el-form-item label="所属区级机构" prop="area_agent_name" label-width="100px">
+                <el-form-item label="所属机构" prop="area_agent_name" label-width="68px">
                     <el-input v-model="queryForm.area_agent_name" placeholder="请输入所属区级机构" class="wid_140"></el-input>
                 </el-form-item>
-
+                <!-- 向导姓名 -->
+                <el-form-item label="向导姓名" prop="custom_name" label-width="68px">
+                  <el-input v-model="queryForm.custom_name" placeholder="请输入向导姓名" class="wid_140"></el-input>
+                </el-form-item>
                 <!-- 向导ID -->
                 <el-form-item label="向导ID" prop="customid" label-width="68px">
                     <el-input v-model="queryForm.customid" placeholder="请输入向导ID" class="wid_140"></el-input>
@@ -35,7 +38,7 @@
                 </el-form-item>
                 <!-- 入账状态 -->
                 <el-form-item label="入账状态" prop="virtual_profit_cityagent_status" label-width="68px">
-                    <el-select v-model="queryForm.virtual_profit_cityagent_status" placeholder="请选择入账状态">
+                    <el-select v-model="queryForm.virtual_profit_cityagent_status" placeholder="请选择入账状态" class="wid_140">
                     <el-option
                         v-for="(item, index) of queryForm.virtual_profit_cityagent_statuss"
                         :key="index"
@@ -87,16 +90,17 @@
                 </el-table-column>
                 <el-table-column prop="customid" label="向导ID" width="">
                 </el-table-column>
+                <el-table-column prop="custom_name" label="向导姓名" width="78px">
+                </el-table-column>
                 <!-- 上级id -->
                 <el-table-column prop="up_customid" label="上级ID" width="">
                 </el-table-column>
-                <el-table-column prop="custom_name" label="向导姓名" width="78px">
+                <el-table-column prop="up_custom_name" label="上级姓名" width="">
                 </el-table-column>
                 <!-- 所属机构是区机构 -->
                 <el-table-column v-if="roleId != 10" prop="area_agent_name" label="所属机构" width="">
                 </el-table-column>
-                <el-table-column prop="up_custom_name" label="所属上级" width="">
-                </el-table-column>
+
                 <el-table-column prop="upAmount" label="上级分成" width="50px">
                 </el-table-column>
                 <el-table-column prop="customAmount" label="向导分成" width="50px">
@@ -173,6 +177,8 @@ export default {
                 area_agent_name:'',
                 // 向导id
                 customid:'',
+                // 向导姓名
+                custom_name:'',
                 // 上级id
                 up_customid:'',
                 // 上级姓名
@@ -237,6 +243,8 @@ export default {
                     // 上级姓名
                     up_custom_name:this.queryForm.up_custom_name,
 
+                    // 向导姓名
+                    custom_name:this.queryForm.custom_name,
                     // 收益来源ID(向导ID)
                     customid:this.queryForm.customid,
                     // 出行项目

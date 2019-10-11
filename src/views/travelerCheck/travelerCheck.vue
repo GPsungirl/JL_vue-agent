@@ -74,8 +74,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <!-- 角落ID -->
-                <el-form-item label="角落ID" prop="customid" label-width="68px">
+                <!-- 向导ID -->
+                <el-form-item label="向导ID" prop="customid" label-width="68px">
                     <el-input v-model="queryForm.customid" placeholder="请输入角落ID" class="wid_140"></el-input>
                 </el-form-item>
                 <!-- 上级姓名 -->
