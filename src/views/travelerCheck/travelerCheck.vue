@@ -658,6 +658,7 @@ export default {
           }
         }
         return {
+           _signInUserId: "",
             // 上限分成
             limit_virtual_rate:'',
             limit_account_rate:'',
@@ -936,6 +937,8 @@ export default {
     created(){
         // 初始化roleId
         this.roleId = this.$store.getters.roleId
+        // 判断是否为roleid是否为11并处理
+    this._signInUserId = this.transformSignInUserId();
         // 初始化 地图plugin
         this.initMap();
         // 初始化 银行信息
@@ -946,10 +949,19 @@ export default {
         this.getTableDataList(1)
     },
     methods:{
+      // 处理signInUserId的值（当roleid为11时）
+    transformSignInUserId() {
+      // 先判断roleid == 11 ,若11，则up_userid 作为 signinuserid的值
+      if (this.$store.getters.roleId == 11) {
+        return this.$store.getters.up_userId;
+      } else {
+        return this.$store.getters.userId;
+      }
+    },
         // 初始化 银行信息
         getBankList(){
             this.$http.post(`${ commonUrl.baseUrl}/agent/addAgent`,{data:{
-                signInUserId: this.$store.getters.userId,
+                signInUserId: this._signInUserId,
                 signInRoleId: this.$store.getters.roleId,
             }}).then(res=>{
                 if(res.data.code == '0000'){
@@ -977,7 +989,7 @@ export default {
             let param = {
                data:{
                     // 公有
-                    signInUserId: this.$store.getters.userId,
+                    signInUserId: this._signInUserId,
                     signInRoleId: this.$store.getters.roleId,
                     pageNum: pageNum,
                     pageSize: 10,
@@ -1275,7 +1287,7 @@ export default {
             let param ={
               data:{
                 // 公有
-                signInUserId: this.$store.getters.userId,
+                signInUserId: this._signInUserId,
                 signInRoleId: this.$store.getters.roleId,
                 customid:row.customid
               }

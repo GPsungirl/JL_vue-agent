@@ -7,6 +7,7 @@ const getters = {
   roles: state => state.user.roles,
   permission_routes: state => state.permission.routes,
   userId: state => state.user.userId,
+  up_userId:state=> state.user.up_userId,
   roleId: state => state.user.roleId,
   real_name:state=>state.user.real_name,
   merchant_center_code: state => state.user.merchant_center_code, // 招商中心编号

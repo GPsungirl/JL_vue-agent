@@ -8,7 +8,8 @@ const state = {
   roles: [],
   roleId: localStorage.getItem('pp_roleId') ? JSON.parse(localStorage.getItem('pp_roleId')) : '',  // 查询列表时 所需字段 signInRoleId
   userId: localStorage.getItem('pp_userId') ? JSON.parse(localStorage.getItem('pp_userId')) : '',        // 每个接口都需要signInUserId
-  real_name:localStorage.getItem('pp_real_name') ? JSON.parse(localStorage.getItem('pp_real_name')) : '', // 导航栏需要名称
+  up_userId:localStorage.getItem('pp_up_userId') ? JSON.parse(localStorage.getItem('pp_up_userId')) : '',
+  real_name:localStorage.getItem('pp_real_name') ? localStorage.getItem('pp_real_name') : '', // 导航栏需要名称
   merchant_center_code:localStorage.getItem('pp_merchant_center_code') ? JSON.parse(localStorage.getItem('pp_merchant_center_code')) : '',   //招商中心需要 merchant_center_code
 }
 
@@ -28,6 +29,9 @@ const mutations = {
   SET_USERID: (state, userId) => {
     state.userId = userId
   },
+  SET_UPUSERID: (state,up_userId) =>{
+    state.up_userId = up_userId
+  },
   SET_REALNAME: (state, real_name) =>{
     state.real_name = real_name
   },
@@ -38,11 +42,11 @@ const mutations = {
   SET_MERCHANT_CENTER_CODE: (state, merchant_center_code) => {
     state.merchant_center_code = merchant_center_code
   }
-  
+
 }
 
 const actions = {
- 
+
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {

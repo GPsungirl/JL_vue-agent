@@ -1,11 +1,15 @@
 <template>
   <div class="dashboard-container">
-    <p class="title">
+    <p v-if="notRoleId11" class="title">
       <span>{{agent_name}}</span>
       ，欢迎登陆角落管理系统，您的机构代码为
       <span>{{agentid}}</span>
     </p>
-    <div class="main_content">
+    <p v-else class="title">
+      <span>{{ $store.getters.real_name }}</span>
+      ，欢迎登陆角落管理系统
+    </p>
+    <div v-if="notRoleId11" class="main_content">
       <el-row>
         <el-col :span="8" :offset="4">
           <div class="grid-content bg-purple box_shadow">
@@ -68,6 +72,7 @@ export default {
   name: "Dashboard",
   data() {
     return {
+      notRoleId11:true,
       agent_name: "",
       agentid: "",
       // 昨日收益
@@ -79,9 +84,17 @@ export default {
     };
   },
   created() {
-    // 初始化数据
-    this.getData();
-    console.log(this.getYestoday());
+    // 判断roleid是不是11,是则没有收益这些东西
+    if(this.$store.getters.roleId == 11){
+      // dom不显示收益，也不调用接口
+      this.notRoleId11 = false
+    }else{
+      this.notRoleId11 = true
+      // 初始化数据
+      this.getData();
+    }
+
+
   },
   computed: {
     ...mapGetters(["name", "roles"])

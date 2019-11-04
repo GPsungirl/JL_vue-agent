@@ -405,6 +405,7 @@ export default {
     name: 'videoChoice',
     data(){
         return {
+           _signInUserId:'',
             choice_row:'',
             dp:'',
             // 视频条数
@@ -596,18 +597,27 @@ export default {
     created(){
         // 初始化roleId
         this.roleId = this.$store.getters.roleId
-
+        // 判断是否为roleid是否为11并处理
+    this._signInUserId = this.transformSignInUserId();
         // 初始化 主列表
         this.getTableDataList(1)
     },
     methods:{
-
+       // 处理signInUserId的值（当roleid为11时）
+    transformSignInUserId(){
+      // 先判断roleid == 11 ,若11，则up_userid 作为 signinuserid的值
+      if(this.$store.getters.roleId == 11){
+        return this.$store.getters.up_userId
+      }else{
+        return this.$store.getters.userId
+      }
+    },
         // 获取视频主列表
         getTableDataList(pageNum){
             let param = {
                data:{
                     // 公有
-                    signInUserId: this.$store.getters.userId,
+                    signInUserId: this._signInUserId,
                     signInRoleId: this.$store.getters.roleId,
                     pageNum: pageNum,
                     pageSize: 10,
@@ -732,7 +742,7 @@ export default {
             let param = {
                 data:{
                     // 公有
-                    signInUserId: this.$store.getters.userId,
+                    signInUserId: this._signInUserId,
                     signInRoleId: this.$store.getters.roleId,
                     // 私有
                     customid:row.customid,
@@ -792,7 +802,7 @@ export default {
             let param = {
                 data:{
                     // 公有
-                    signInUserId: this.$store.getters.userId,
+                    signInUserId: this._signInUserId,
                     signInRoleId: this.$store.getters.roleId,
                     // 私有
                     customid:row.customid,

@@ -124,6 +124,7 @@ export default {
     data(){
       return {
           roleId:'',
+          _signInUserId:'',
           // 主列表
           tableLoading:false,
           tableData:[],
@@ -170,18 +171,29 @@ export default {
       }
     },
     created(){
-        this.roleId = this.$store.getters.roleId
+        this.roleId = this.$store.getters.roleId;
+         // 判断是否为roleid是否为11并处理
+    this._signInUserId = this.transformSignInUserId();
         // 初始化主列表
         this.getTabelDataList(1)
     },
     methods:{
+      // 处理signInUserId的值（当roleid为11时）
+    transformSignInUserId(){
+      // 先判断roleid == 11 ,若11，则up_userid 作为 signinuserid的值
+      if(this.$store.getters.roleId == 11){
+        return this.$store.getters.up_userId
+      }else{
+        return this.$store.getters.userId
+      }
+    },
         // 初始化主列表
         getTabelDataList(pageNum){
             // 参数
             let param = {
                 data: {
                     // 公有
-                    signInUserId: this.$store.getters.userId,
+                    signInUserId: this._signInUserId,
                     signInRoleId: this.$store.getters.roleId,
                     pageNum: pageNum,
                     pageSize: 10,

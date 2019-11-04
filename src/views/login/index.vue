@@ -104,6 +104,7 @@ export default {
         const res = await this.$http.post(`${commonUrl.baseUrl}/web/login`, qs.stringify(param));
         if(res.data.code == '0000'){
           console.log(res)
+          debugger
           // 存roleId
           this.$store.commit('user/SET_ROLEID', res.data.data.sysRole.id)
           localStorage.setItem('pp_roleId',JSON.stringify(res.data.data.sysRole.id))
@@ -121,9 +122,13 @@ export default {
           // 存 userId
           this.$store.commit('user/SET_USERID', res.data.data.user.id)
           localStorage.setItem('pp_userId',JSON.stringify(res.data.data.user.id))
+
+          // 存 up_userid(当roleid为11时方便调用)
+          this.$store.commit('user/SET_UPUSERID', res.data.data.user.up_userid)
+          localStorage.setItem('pp_up_userId',JSON.stringify(res.data.data.user.up_userid))
           // 存 real_name
           this.$store.commit('user/SET_REALNAME', res.data.data.user.real_name)
-          localStorage.setItem('pp_real_name',JSON.stringify(res.data.data.user.real_name))
+          localStorage.setItem('pp_real_name',res.data.data.user.real_name)
 
           this.loading = false
           this.$router.push({path: '/'}) //这里 这么写 ？
