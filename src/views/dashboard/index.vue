@@ -9,6 +9,18 @@
       <span>{{ $store.getters.real_name }}</span>
       ，欢迎登陆角落管理系统
     </p>
+     <!-- 设置手机号 -->
+    <el-form :inline="true" :model="queryForm" ref="queryForm" :rules="notice_phone_rules" size="mini" class="demo-form-inline" style="text-align:center;margin-top:30px">
+      <!-- 手机号 -->
+      <p class="phone_tip">（提示：该手机号用于接收下属向导订单的相关信息）</p>
+      <el-form-item label="设置手机号" prop="notice_phone">
+        <el-input v-model="queryForm.notice_phone" placeholder="请输入手机号" class="wid_140"></el-input>
+      </el-form-item>
+       <!-- 查询 -->
+      <el-form-item>
+        <el-button type="primary" size='mini' @click="handle_setPhone">设置</el-button>
+      </el-form-item>
+    </el-form>
     <div v-if="notRoleId11" class="main_content">
       <el-row>
         <el-col :span="8" :offset="4">
@@ -60,6 +72,7 @@
         </el-col>-->
       </el-row>
     </div>
+
   </div>
 </template>
 
@@ -68,10 +81,33 @@ import { mapGetters } from "vuex";
 import commonUrl from "../../utils/common";
 import qs from "qs";
 import { setTimeout } from "timers";
+import { validNum100, validNum15, validDyNum, filterSpace} from '../../utils/validate'
+import {
+  isvalidPhone
+} from "../../utils/validate";
 export default {
   name: "Dashboard",
   data() {
+     // 校验手机号
+    let validPhone=(rule, value,callback)=>{
+        if (!value){
+            callback(new Error('请输入电话号码'))
+        }else  if (!isvalidPhone(value)){
+            callback(new Error('请输入正确手机号码'))
+        }else {
+            callback()
+        }
+    }
     return {
+      // 手机号设置
+      queryForm:{
+        notice_phone:''
+      },
+      notice_phone_rules:{
+        notice_phone:[
+            { required: true, validator:validPhone, trigger: 'blur' }
+        ],
+      },
       notRoleId11:true,
       agent_name: "",
       agentid: "",
@@ -100,6 +136,35 @@ export default {
     ...mapGetters(["name", "roles"])
   },
   methods: {
+     // 设置手机号
+    handle_setPhone(){
+      if(this.m_valid_addForm('queryForm')){
+        let param  = {
+          data:{
+            signInUserId:this.$store.getters.userId,
+            notice_phone:this.queryForm.notice_phone
+          }
+        }
+        const loading = this.$loading({
+          lock: true,
+          text: "Loading",
+          spinner: "el-icon-loading",
+          background: "rgba(0, 0, 0, 0.7)"
+        });
+        this.$http
+        .post(`${commonUrl.baseUrl}/agent/setNoticePhone`, param)
+        .then(res => {
+          if (res.data.code == "0000") {
+            this.m_message(res.data.msg, "success");
+            this.getData();
+          } else {
+            this.m_message(res.data.msg, "warning");
+            loading.close();
+          }
+        })
+        .catch(err => {});
+      }
+    },
     // 初始化数据
     getData() {
       // 机构信息
@@ -119,10 +184,11 @@ export default {
         .post(`${commonUrl.baseUrl}/agent/selectAgentInfo`, _param1)
         .then(res => {
           if (res.data.code == "0000") {
+            console.log(res)
             let result = res.data.data.userAgent;
             this.agent_name = result.agent_name;
             this.agentid = result.agentid;
-
+            this.queryForm.notice_phone = result.notice_phone;
             // 昨日收益 和上月收益
             this.getEarnings(loading);
           } else {
@@ -225,6 +291,20 @@ export default {
       var firstDay = year + month;
       return firstDay;
     },
+    // 新增 校验规则
+    m_valid_addForm(formName) {
+      let flag = false;
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          flag = true;
+          return true;
+        } else {
+          flag = false;
+          return false;
+        }
+      });
+      return flag;
+    },
     // 提示信息 message:提示信息   type 提示类型
     m_message(message, type) {
       this.$message({
@@ -247,7 +327,9 @@ export default {
   }
   .font14 {
     font-size: 12px;
+     color: #666;
   }
+
 }
 .main_content {
   margin-top: 40px;
@@ -258,6 +340,10 @@ export default {
 }
 .title span {
   color: #000;
+}
+.phone_tip{
+  font-size: 12px;
+  color:#606266;
 }
 </style>
 <style scoped>

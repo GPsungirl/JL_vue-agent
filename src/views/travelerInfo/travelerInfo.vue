@@ -209,7 +209,7 @@
               size="small"
             >取消校园代表</el-button>
             <!-- 向导与咨询互转 2全职向导人员 3咨询人员-->
-            <el-button
+            <!-- <el-button
               v-if="scope.row.traveler_type == 2"
               @click="handle_transformTraveler_type(scope.row)"
               type="text"
@@ -220,7 +220,7 @@
               @click="handle_transformTraveler_type(scope.row)"
               type="text"
               size="small"
-            >转为向导</el-button>
+            >转为向导</el-button> -->
           </template>
         </el-table-column>
       </el-table>

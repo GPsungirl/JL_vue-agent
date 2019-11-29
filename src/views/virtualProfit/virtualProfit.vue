@@ -74,10 +74,11 @@
             <!-- 表格 -->
             <el-table :data="tableData" v-loading="tableLoading" border stripe style="width: 100%">
                 <el-table-column prop="" label="收益类型" width="" >
-                    <!-- 收益类型1礼物 2红包 -->
+                    <!-- 收益类型1礼物 2红包 8预约上线-->
                     <template slot-scope="scope">
                         <span v-if="scope.row.virtual_class == 1">礼物</span>
                         <span v-else-if="scope.row.virtual_class == 2">红包</span>
+                        <span v-else-if="scope.row.virtual_class == 8">预约上线</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="virtual_name" label="订单信息" width="">

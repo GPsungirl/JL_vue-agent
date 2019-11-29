@@ -673,30 +673,49 @@ export default {
         .post(`${commonUrl.baseUrl}/liveVideoRecord/getVideoPlay`, param)
         .then(res => {
           if (res.data.code == "0000") {
+            console.log(res)
             this.detail_loading = false;
             // 打开内层弹框 播放视频
             this.video_dialogVisible = true;
             // 为了解决首次初始化空白的问题，而采用异步的调用方式
-            setTimeout(() => {
-              this.dp = new DPlayer({
-                container: document.getElementById("dplayer"),
-                video: {
-                  url: res.data.data.video_url,
-                  type: "customFlv",
-                  autoplay: "auto",
-                  customType: {
-                    customFlv: function(video, player) {
-                      const flvPlayer = flv.createPlayer({
-                        type: "flv",
-                        url: video.src
-                      });
-                      flvPlayer.attachMediaElement(video);
-                      flvPlayer.load();
+            let _url = res.data.data.video_url
+            let _houzui = _url.substr(_url.lastIndexOf(".")+1)
+            console.log(_houzui)
+            // 判断mp4或者flv
+            if(_houzui === "flv"){
+              setTimeout(() => {
+                this.dp = new DPlayer({
+                  container: document.getElementById("dplayer"),
+                  video: {
+                    url: res.data.data.video_url,
+                    type: "customFlv", //customFlv
+                    autoplay: "auto",
+                    customType: {
+                      customFlv: function(video, player) {
+                        const flvPlayer = flv.createPlayer({
+                          type: "flv",
+                          url: video.src
+                        });
+                        flvPlayer.attachMediaElement(video);
+                        flvPlayer.load();
+                      }
                     }
                   }
-                }
-              });
-            }, 1);
+                });
+              }, 1);
+            }else if(_houzui === "mp4"){
+              setTimeout(() => {
+                this.dp = new DPlayer({
+                  container: document.getElementById("dplayer"),
+                  video: {
+                    url: res.data.data.video_url,
+                    type: "auto", //customFlv
+                    autoplay: "auto"
+                  }
+                });
+              }, 1);
+            }
+
           } else {
             this.m_message(res.data.msg, "warning");
           }

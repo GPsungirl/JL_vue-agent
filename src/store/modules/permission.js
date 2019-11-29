@@ -18,7 +18,7 @@ function hasPermission(roles, route) {
 }
 //处理 动态路由数据
 function setServeMap(routerMap) {
-
+  console.log(routerMap)
   //深克隆
   let cloneData = JSON.parse(JSON.stringify(routerMap))
 
@@ -135,6 +135,7 @@ const fya_routerMap = {
   travelOrder: () => import('@/views/travelOrder/travelOrder'), // 出行记录
   videoExamine: () => import('@/views/videoExamine/videoExamine'), // 录制视频审核
   videoChoice: () => import('@/views/videoChoice/videoChoice'), // 工作间视频设置
+  InvitationOnlineRecord: () => import('@/views/InvitationOnlineRecord/InvitationOnlineRecord'), //邀约上线记录
   // 客户管理     customer
   customInfo: () => import('@/views/customInfo/customInfo'), //用户查询
   consumeOrderUnion: () => import('@/views/consumeOrderUnion/consumeOrderUnion'), //消费记录

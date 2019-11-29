@@ -118,7 +118,7 @@ export default {
           // const authorization = res.headers.authorization;  //令牌
           // this.$store.commit('user/SET_TOKEN', authorization) //请求用户信息
           // setToken(authorization) // 存到cookie里面
-
+          
           // 存 userId
           this.$store.commit('user/SET_USERID', res.data.data.user.id)
           localStorage.setItem('pp_userId',JSON.stringify(res.data.data.user.id))

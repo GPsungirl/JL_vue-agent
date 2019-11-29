@@ -138,7 +138,7 @@
         </div>
         <!-- M3 dialog 新增 -->
         <el-dialog
-            title="新增成员"
+            title="新增机构"
             :visible.sync="add_dialogVisible"
             width="55%"
             top="8vh"
@@ -151,25 +151,25 @@
             element-loading-background="rgba(0, 0, 0, 0.8)"
             >
             <!-- 成员类型 -->
-            <el-form :inline="true" :model="add_form" :rules="add_rules" ref="add_form" label-width="80px" class="demo-form-inline valid_form">
+            <!-- <el-form :inline="true" :model="add_form" :rules="add_rules" ref="add_form" label-width="80px" class="demo-form-inline valid_form">
                 <el-form-item label="成员类型" prop="member_type" class="marg_r0">
-                    <el-select
-                        v-model="add_form.member_type"
-                        @change="changeOption_memberType($event)"
-                        class="wid_180 "
-                        placeholder="请选择成员类型">
-                        <el-option
-                            v-for="(item, index) in add_form.member_types"
-                            :key="index"
-                            :label="item.txt"
-                            :value="item.id"
+                  <el-select
+                      v-model="add_form.member_type"
+                      @change="changeOption_memberType($event)"
+                      class="wid_180 "
+                      placeholder="请选择成员类型">
+                      <el-option
+                          v-for="(item, index) in add_form.member_types"
+                          :key="index"
+                          :label="item.txt"
+                          :value="item.id"
 
-                            >
-                        </el-option>
+                          >
+                      </el-option>
 
-                    </el-select>
+                  </el-select>
                 </el-form-item>
-            </el-form>
+            </el-form> -->
             <!-- 代理机构2 -->
             <div v-show="show_memberType">
                 <!-- 业务信息 -->

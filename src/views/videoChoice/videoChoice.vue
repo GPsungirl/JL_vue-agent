@@ -1,5 +1,5 @@
 <template>
-    <!-- 视频审核 -->
+    <!-- 视频设置 -->
     <div class="pad_5">
         <!-- M1 查询区域 -->
         <div class="query_fields pad_b_no">
@@ -108,7 +108,7 @@
         </div>
         <!-- M3 设置视频dialog-->
         <el-dialog
-            title="审核视频"
+            title="设置视频"
             :visible.sync="detail_dialogVisible"
             width="50%"
             center
@@ -410,7 +410,6 @@ export default {
             dp:'',
             // 视频条数
             video_num:'',
-
             // 地图
             districtSearch:'',
             // 主列表
@@ -604,14 +603,14 @@ export default {
     },
     methods:{
        // 处理signInUserId的值（当roleid为11时）
-    transformSignInUserId(){
-      // 先判断roleid == 11 ,若11，则up_userid 作为 signinuserid的值
-      if(this.$store.getters.roleId == 11){
-        return this.$store.getters.up_userId
-      }else{
-        return this.$store.getters.userId
-      }
-    },
+      transformSignInUserId(){
+        // 先判断roleid == 11 ,若11，则up_userid 作为 signinuserid的值
+        if(this.$store.getters.roleId == 11){
+          return this.$store.getters.up_userId
+        }else{
+          return this.$store.getters.userId
+        }
+      },
         // 获取视频主列表
         getTableDataList(pageNum){
             let param = {
@@ -659,28 +658,43 @@ export default {
                     this.video_dialogVisible = true
                     //this.video_loading = true
                     // 为了解决首次初始化空白的问题，而采用异步的调用方式
-                    setTimeout(()=>{
+                    let _url = res.data.data.video_url
+                    let _houzui = _url.substr(_url.lastIndexOf(".")+1)
+                    console.log(_houzui)
+                    // 判断mp4或者flv
+                    if(_houzui === "flv"){
+                      setTimeout(() => {
                         this.dp = new DPlayer({
-                            container: document.getElementById('dplayer'),
-                            video: {
-                                url: res.data.data.video_url,
-                                type: 'customFlv',
-                                autoplay:'auto',
-                                customType: {
-                                    'customFlv': function (video, player) {
-                                        const flvPlayer = flv.createPlayer({
-                                            type: 'flv',
-                                            url: video.src
-                                        });
-                                        flvPlayer.attachMediaElement(video);
-                                        flvPlayer.load();
-                                    }
-                                }
+                          container: document.getElementById("dplayer"),
+                          video: {
+                            url: res.data.data.video_url,
+                            type: "customFlv", //customFlv
+                            autoplay: "auto",
+                            customType: {
+                              customFlv: function(video, player) {
+                                const flvPlayer = flv.createPlayer({
+                                  type: "flv",
+                                  url: video.src
+                                });
+                                flvPlayer.attachMediaElement(video);
+                                flvPlayer.load();
+                              }
                             }
+                          }
                         });
-                    },1)
-
-
+                      }, 1);
+                    }else if(_houzui === "mp4"){
+                      setTimeout(() => {
+                        this.dp = new DPlayer({
+                          container: document.getElementById("dplayer"),
+                          video: {
+                            url: res.data.data.video_url,
+                            type: "auto", //customFlv
+                            autoplay: "auto"
+                          }
+                        });
+                      }, 1);
+                    }
                 }
             }).catch(err=>{})
         },
@@ -712,11 +726,11 @@ export default {
         // 设置视频 删除
         handle_delete(row){
             let param = {
-                data:{
-                    video_status:2, // 删除
-                    live_video_recordid:row.live_video_recordid,
-                    fileId:row.file_id,
-                }
+              data:{
+                  video_status:2, // 删除
+                  live_video_recordid:row.live_video_recordid,
+                  fileId:row.file_id,
+              }
             }
             this.detail_tableLoading = true
             this.$http.post(`${commonUrl.baseUrl}/liveVideoRecord/updateVideoStatus`, param).then(res=>{
@@ -762,28 +776,29 @@ export default {
         },
         // 关闭 播放的视频
         close_video(){
-            // 先暂停
-            if(this.dp){
-                this.dp.destroy()
-            }
-            // 关闭
-            this.video_dialogVisible = false
-            // 刷新
-            this.refresh_examineTableData()
+          console.log(this.dp)
+          // 先暂停
+          if(this.dp){
+            this.dp.destroy()
+          }
+          // 关闭
+          this.video_dialogVisible = false
+          // 刷新
+          this.refresh_examineTableData()
         },
         // 监听 关闭按钮
         handleDialogClose(){
-            // this.dp.destroy()
-            if(this.dp){
-                this.dp.destroy()
-            }
-            this.video_dialogVisible = false
-            // 刷新
-            this.refresh_examineTableData()
+          console.log(this.dp)
+          // this.dp.destroy()
+          if(this.dp){
+              this.dp.destroy()
+          }
+          this.video_dialogVisible = false
+          // 刷新
+          this.refresh_examineTableData()
         },
         // 关闭 工作间视频列表dialog(按钮)
         handle_close(){
-
             this.detail_dialogVisible = false
             // 刷新主列表
             this.handle_refresh()
