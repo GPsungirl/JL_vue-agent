@@ -195,7 +195,7 @@
         <el-dialog
             title="上级详情"
             :visible.sync="detail_dialogVisible"
-            width="50%"
+            width="60%"
             center
             :close-on-click-modal="false"
             v-loading="detail_loading"
@@ -286,7 +286,7 @@
             <!-- 证件照 -->
             <div class="demo-image card_photo">
                 <el-row>
-                    <el-col :span="8" >
+                    <el-col :span="6" >
                         <span class="demonstration">身份证正面</span>
                         <el-image
                             style="width: 200px; height: 100px"
@@ -295,7 +295,7 @@
                             fit="contain">
                         </el-image>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <span class="demonstration">身份证反面</span>
                         <el-image
                             style="width: 200px; height: 100px"
@@ -305,12 +305,22 @@
                         </el-image>
                     </el-col>
                     <!-- 学生证 或者导游证 -->
-                    <el-col :span="8" v-if="is_student_guider">
+                    <el-col :span="6" v-if="is_student_guider">
                         <span class="demonstration">{{ detail_form.profession_name }}</span>
                         <el-image
                             style="width: 200px; height: 100px"
                             :src="detail_form.profession_photo_url"
                             :preview-src-list="profession_photo_url_srcList"
+                            fit="contain">
+                        </el-image>
+                    </el-col>
+                    <!-- 封面图 -->
+                    <el-col :span="6" >
+                        <span class="demonstration">封面图片</span>
+                        <el-image
+                            style="width: 200px; height: 100px"
+                            :src="detail_form.traveler_photo_url"
+                            :preview-src-list="traveler_photo_url_srcList"
                             fit="contain">
                         </el-image>
                     </el-col>
@@ -667,6 +677,7 @@ export default {
             idcard_back_url_srcList:[],
             idcard_front_url_srcList:[],
             profession_photo_url_srcList:[],
+            traveler_photo_url_srcList:[],
             // 判断是否是学生或者导游 是则显示否则取消
             is_student_guider:false,
             // 地图
@@ -803,6 +814,8 @@ export default {
                 profession_name:'',// 职业证名称
                 // 职业证号
                 profession_no:'',
+                // 封面url
+                traveler_photo_url:'',
             },
             // 上级 详情
             up_detail_form:{
@@ -938,7 +951,7 @@ export default {
         // 初始化roleId
         this.roleId = this.$store.getters.roleId
         // 判断是否为roleid是否为11并处理
-    this._signInUserId = this.transformSignInUserId();
+        this._signInUserId = this.transformSignInUserId();
         // 初始化 地图plugin
         this.initMap();
         // 初始化 银行信息
@@ -950,14 +963,14 @@ export default {
     },
     methods:{
       // 处理signInUserId的值（当roleid为11时）
-    transformSignInUserId() {
-      // 先判断roleid == 11 ,若11，则up_userid 作为 signinuserid的值
-      if (this.$store.getters.roleId == 11) {
-        return this.$store.getters.up_userId;
-      } else {
-        return this.$store.getters.userId;
-      }
-    },
+      transformSignInUserId() {
+        // 先判断roleid == 11 ,若11，则up_userid 作为 signinuserid的值
+        if (this.$store.getters.roleId == 11) {
+          return this.$store.getters.up_userId;
+        } else {
+          return this.$store.getters.userId;
+        }
+      },
         // 初始化 银行信息
         getBankList(){
             this.$http.post(`${ commonUrl.baseUrl}/agent/addAgent`,{data:{
@@ -1196,7 +1209,7 @@ export default {
           this.idcard_back_url_srcList = []
           this.idcard_front_url_srcList=[]
           this.profession_photo_url_srcList=[]
-
+          this.traveler_photo_url_srcList = []
           this.detail_dialogVisible = true
           this.detail_loading = true
           this.$http.post(`${ commonUrl.baseUrl }/travelerInfo/selectTravelerInfo`, {data:{customid:row.customid}}).then(res=>{
@@ -1261,12 +1274,12 @@ export default {
                 this.detail_form.profession_no = result.profession_no,
                 this.detail_form.profession_name = result.profession_type == 3 ? '导游证':'学生证'
                 this.detail_form.profession_photo_url = result.profession_photo_url
-
+                this.detail_form.traveler_photo_url = result.traveler_photo_url
                 // 大图预览
                 this.idcard_back_url_srcList.push(result.idcard_back_url),
                 this.idcard_front_url_srcList.push(result.idcard_front_url)
                 this.profession_photo_url_srcList.push(result.profession_photo_url)
-
+                this.traveler_photo_url_srcList.push(result.traveler_photo_url)
                 // 贝壳分成
                 this.detail_form.virtual_rate = result.virtual_rate
                 // 出行分成
