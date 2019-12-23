@@ -136,6 +136,9 @@ const fya_routerMap = {
   videoExamine: () => import('@/views/videoExamine/videoExamine'), // 录制视频审核
   videoChoice: () => import('@/views/videoChoice/videoChoice'), // 工作间视频设置
   InvitationOnlineRecord: () => import('@/views/InvitationOnlineRecord/InvitationOnlineRecord'), //邀约上线记录
+  // 活动管理
+  redEnvelopeActivity: () => import('@/views/redEnvelopeActivity/redEnvelopeActivity'), // 红包活动
+  redEnveiopeRecord: () => import('@/views/redEnveiopeRecord/redEnveiopeRecord'), // 红包领取记录
   // 客户管理     customer
   customInfo: () => import('@/views/customInfo/customInfo'), //用户查询
   consumeOrderUnion: () => import('@/views/consumeOrderUnion/consumeOrderUnion'), //消费记录
@@ -176,7 +179,7 @@ const actions = {
       const fya_list = setServeMap(list)
       const gp_list = modifyKeys(fya_list)
 
-
+      console.log(gp_list)
       // 测试 后台 传来的 路由表
       const asyncRouterMap = generateAsyncRouter(fya_routerMap, gp_list)
       asyncRouterMap.push({

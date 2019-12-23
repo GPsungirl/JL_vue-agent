@@ -128,7 +128,7 @@ export default {
           localStorage.setItem('pp_up_userId',JSON.stringify(res.data.data.user.up_userid))
           // 存 real_name
           this.$store.commit('user/SET_REALNAME', res.data.data.user.real_name)
-          localStorage.setItem('pp_real_name',res.data.data.user.real_name)
+          localStorage.setItem('pp_real_name',JSON.stringify(res.data.data.user.real_name))
 
           this.loading = false
           this.$router.push({path: '/'}) //这里 这么写 ？
@@ -160,6 +160,10 @@ export default {
         type
       })
     },
+    // 去除空格
+    deleteTrim(str){
+      return str.replace(/^\s*|\s*$/g,"")
+    }
   }
 }
 </script>

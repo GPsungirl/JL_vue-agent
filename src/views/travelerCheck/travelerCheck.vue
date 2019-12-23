@@ -286,21 +286,21 @@
             <!-- 证件照 -->
             <div class="demo-image card_photo">
                 <el-row>
-                    <el-col :span="6" >
-                        <span class="demonstration">身份证正面</span>
-                        <el-image
-                            style="width: 200px; height: 100px"
-                            :src="detail_form.idcard_back_url"
-                            :preview-src-list="idcard_back_url_srcList"
-                            fit="contain">
-                        </el-image>
-                    </el-col>
                     <el-col :span="6">
-                        <span class="demonstration">身份证反面</span>
+                        <span class="demonstration">身份证正面</span>
                         <el-image
                             style="width: 200px; height: 100px"
                             :src="detail_form.idcard_front_url"
                             :preview-src-list="idcard_front_url_srcList"
+                            fit="contain">
+                        </el-image>
+                    </el-col>
+                    <el-col :span="6" >
+                        <span class="demonstration">身份证反面</span>
+                        <el-image
+                            style="width: 200px; height: 100px"
+                            :src="detail_form.idcard_back_url"
+                            :preview-src-list="idcard_back_url_srcList"
                             fit="contain">
                         </el-image>
                     </el-col>
