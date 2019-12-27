@@ -251,3 +251,9 @@ body .el-table colgroup.gutter {
   margin:0;
   font-size:12px;
 }
+.red_tip.red_color{
+  color:red;
+}
+.green_color{
+  color:green;
+}

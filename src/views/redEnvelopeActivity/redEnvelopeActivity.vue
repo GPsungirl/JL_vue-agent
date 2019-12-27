@@ -3,9 +3,9 @@
     <p class="title">
       账户余额：
       <span>{{dataForm.accountRemain}}</span>
-      元            
+      元
     </p>
-    <p class="title zh_tip">      
+    <p class="title zh_tip">
       账户余额目前采用对公转账方式充值，如需开启红包活动，请联系总部完成充值
     </p>
     <div class="main_content redEnverlop">
@@ -44,6 +44,9 @@
               </el-form-item>
               <el-form-item>
                 <p class="red_tip">(提示：红包数量根据机构下属已有向导数量上浮10%计算。人数小于50人时，按照基础50人计算，红包数量=向导数*(1+0.1)*2，今日根据数量动态调整)</p>
+                <p class="red_tip red_color">(**修改明日发放金额的时间段为:6:00-22:00,其他时间段禁止修改。)</p>
+                <p class="red_tip green_color">(**当日关闭红包活动后禁止重新开启红包活动因此请谨慎关闭红包活动。)</p>
+
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="mini" @click="handle_modi">修改明日发放金额</el-button>
@@ -52,31 +55,31 @@
             </el-form>
           </div>
         </el-col>
-        
+
       </el-row>
     </div>
-    <!-- dialog 修改明日金额-->    
+    <!-- dialog 修改明日金额-->
     <el-dialog
         title="修改明日红包发放金额"
         :visible.sync="detail_dialogVisible"
         width="30%"
         center
-        :close-on-click-modal="false" 
+        :close-on-click-modal="false"
         v-loading="detail_loading"
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(0, 0, 0, 0.8)" 
-        class=""                 
+        element-loading-background="rgba(0, 0, 0, 0.8)"
+        class=""
         >
-        <!-- 业务信息 --> 
-        <el-form :inline="true" :model="modiForm" :rules="modiFormrules" ref="modiForm" class="demo-form-inline " label-width="120px" >                            
+        <!-- 业务信息 -->
+        <el-form :inline="true" :model="modiForm" :rules="modiFormrules" ref="modiForm" class="demo-form-inline " label-width="120px" >
           <el-form-item label="明日红包金额" prop="task_money">
               <el-input v-model.number="modiForm.task_money" placeholder="明日红包金额" class="wid_140"></el-input>元
-          </el-form-item>                                                         
-        </el-form>             
+          </el-form-item>
+        </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="detail_dialogVisible = false" size="mini">取 消</el-button>
-            <el-button type="primary" @click="modiRedMoney" size="mini">确 定</el-button>                
+            <el-button type="primary" @click="modiRedMoney" size="mini">确 定</el-button>
         </span>
     </el-dialog>
   </div>
@@ -163,14 +166,12 @@ export default {
       },
       agent_name: "",
       agentid: "",
-      
+
     };
   },
   created() {
     // 获取agentid
     this.getAgentid()
-
-
   },
   computed: {
     ...mapGetters(["name", "roles"])
@@ -205,7 +206,7 @@ export default {
         .catch(err => {});
       }
     },
-    
+
     // 1获取agentid
     getAgentid(){
       // 机构信息
@@ -224,10 +225,10 @@ export default {
       this.$http
         .post(`${commonUrl.baseUrl}/agent/selectAgentInfo`, _param1)
         .then(res => {
-          if (res.data.code == "0000") {            
+          if (res.data.code == "0000") {
             let result = res.data.data.userAgent;
             this.agent_name = result.agent_name;
-            this.agentid = result.agentid; 
+            this.agentid = result.agentid;
             // 红包个数 今日红包金额
             //this.getData()
             this.initStatus()
@@ -265,7 +266,7 @@ export default {
             // 获取已开通的数据
             this.getData2()
           }
-          loading.close()
+          //loading.close()
         }else{
           this.m_message(res.data.msg, 'warning')
           loading.close()
@@ -273,46 +274,65 @@ export default {
       }).catch(err=>{})
     },
     // 初始化数据(未开通状态下)
-    getData() {
+    getData() { //
       // 查询红包个数
       let _param1 = {
         data: {
           // 公有
           city_agentid: this.agentid
         }
-      };      
-      let pro1 = this.$http.post(`${commonUrl.baseUrl}/travelerInfo/getRedEnvelopeAmount`, _param1)
-      // 修改后明日红包金额
-      let _param2 = {
-        data:{
-          agentid:this.agentid
-        }
-      }
-      let pro2 = this.$http.post(`${commonUrl.baseUrl}/agentTask/selectTaskMoneyTomorrow`, _param2)                                                      
+      };
       const loading = this.$loading({
         lock: true,
         text: "Loading",
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)"
       });
-      Promise.all([pro1, pro2]).then(res=>{
-        let [res1, res2] = res;
-        
+      let pro1 = this.$http.post(`${commonUrl.baseUrl}/travelerInfo/getRedEnvelopeAmount`, _param1).then(res=>{
         // 今日红包个数
-        if(res1.data.code == '0000'){
-          let result1 = res1.data.data.redEnvelopeAmount
-          this.dataForm.redNum = result1                    
-        }else{setTimeout(()=>{this.m_message(res1.data.msg, 'warning')},1)}
-        // 修改后明日红包金额 作为今日红包金额
-        if(res2.data.code == '0000'){
-          let result2 = res2.data.data.taskMoneyTomorrow
-          this.dataForm.redMoney = result2.taskMoney          
-        }else{setTimeout(()=>{this.m_message(res1.data.msg, 'warning')},1)}
+        if(res.data.code == '0000'){
+          let result1 = res.data.data.redEnvelopeAmount
+          this.dataForm.redNum = result1
+          // 清空红包金额
+          this.dataForm.redMoney = ''
+        }else{
+          this.m_message(res.msg,'warning')
 
+        }
         loading.close()
-      }).catch(err=>{
+      }).catch(err=>{})
+      // // 修改后明日红包金额作为今日红包金额
+      // let _param2 = {
+      //   data:{
+      //     agentid:this.agentid
+      //   }
+      // }
+      // let pro2 = this.$http.post(`${commonUrl.baseUrl}/agentTask/selectTaskMoneyTomorrow`, _param2)
 
-      })        
+
+
+      // Promise.all([pro1, pro2]).then(res=>{
+      //   let [res1, res2] = res;
+      //   // 今日红包个数
+      //   if(res1.data.code == '0000'){
+      //     let result1 = res1.data.data.redEnvelopeAmount
+      //     this.dataForm.redNum = result1
+      //   }else{
+      //     //setTimeout(()=>{this.m_message(res1.data.msg, 'warning')},1)
+      //   }
+      //   // 修改后明日红包金额 作为今日红包金额
+      //   if(res2.data.code == '0000'){
+      //     let result2 = res2.data.data.taskMoneyTomorrow
+      //     this.dataForm.redMoney = result2.taskMoney
+      //   }else{
+      //     //console.log('修改明日红包金额')
+      //     //setTimeout(()=>{this.m_message(res1.data.msg, 'warning')},1)
+      //   }
+
+      //   loading.close()
+      // }).catch(err=>{
+
+      // })
     },
     // 初始化数据(已开通状态下)
     getData2(){
@@ -322,7 +342,7 @@ export default {
           // 公有
           city_agentid: this.agentid
         }
-      };      
+      };
       let pro1 = this.$http.post(`${commonUrl.baseUrl}/travelerInfo/getRedEnvelopeAmount`, _param1)
       // 今日红包任务
       let _param2 = {
@@ -330,7 +350,7 @@ export default {
           agentid:this.agentid
         }
       }
-      let pro2 = this.$http.post(`${commonUrl.baseUrl}/agentTaskSub/selectTaskMoneyToday`, _param2)                                                      
+      let pro2 = this.$http.post(`${commonUrl.baseUrl}/agentTaskSub/selectTaskMoneyToday`, _param2)
       // 明日红包金额
       let _param3 = {
         data:{
@@ -349,13 +369,17 @@ export default {
         // 今日红包个数
         if(res1.data.code == '0000'){
           let result1 = res1.data.data.redEnvelopeAmount
-          this.dataForm.redNum2 = result1                    
-        }else{setTimeout(()=>{this.m_message(res1.data.msg, 'warning')},1)}
-        // 今日红包金额 
+          this.dataForm.redNum2 = result1
+        }else{
+          //setTimeout(()=>{this.m_message(res1.data.msg, 'warning')},1)
+        }
+        // 今日红包金额
         if(res2.data.code == '0000'){
           let result2 = res2.data.data.taskMoneyToday
-          this.dataForm.redMoney2 = result2.taskSrcMoney          
-        }else{setTimeout(()=>{this.m_message(res1.data.msg, 'warning')},1)}
+          this.dataForm.redMoney2 = result2.taskSrcMoney
+        }else{
+          //setTimeout(()=>{this.m_message(res1.data.msg, 'warning')},1)
+        }
         // 明日红包金额
         if(res3.data.code == '0000'){
           // console.log(res)
@@ -385,20 +409,22 @@ export default {
           background: "rgba(0, 0, 0, 0.7)"
         });
         this.$http.post(`${commonUrl.baseUrl}/agentTask/openOrCloseAgentTask`, param).then(res=>{
-          if(res.data.code == '0000'){          
+          if(res.data.code == '0000'){
             this.m_message(res.data.msg,'success')
             // 展示修改栏
             this.showUnactive = false
+
             // 更新数据（已开通）
-            this.getData2()
-            
+            this.initStatus()
+            //this.getData2()
+
           }else{
             this.m_message(res.data.msg,'warning')
-            
+
           }
           loading.close()
         }).catch(err=>{})
-      }     
+      }
     },
     // 操作 修改红包
     handle_modi(){
@@ -418,7 +444,7 @@ export default {
           this.m_message(res.data.msg,'success')
           // 打开页面
           this.detail_dialogVisible = true
-          
+
         }else{
           this.m_message(res.data.msg, 'warning')
         }
@@ -442,7 +468,8 @@ export default {
             this.m_message(res.data.msg,'success')
             this.detail_dialogVisible = false
             // 更新主列表
-            this.getData2()
+            this.initStatus()
+            //this.getData2()
           }else{
             this.m_message(res.data.msg, 'warning')
           }
@@ -469,10 +496,12 @@ export default {
           // 切换显示栏 更新数据
           this.showUnactive = true
           this.m_message(res.data.msg, 'success')
-          this.getData()
+          // 重新初始化
+          this.initStatus()
+
         }else{
           this.m_message(res.data.msg,'warning')
-        }        
+        }
         loading.close()
       }).catch(err=>{})
     },

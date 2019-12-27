@@ -8,7 +8,7 @@
         :model="queryForm"
         ref="queryForm"
         size="mini"
-        class="demo-form-inline" label-width="70px">                   
+        class="demo-form-inline" label-width="70px">
         <!-- 向导ID -->
         <el-form-item label="向导ID" prop="customid" label-width>
           <el-input v-model="queryForm.customid" placeholder="请输入向导ID" class="wid_140"></el-input>
@@ -16,11 +16,11 @@
         <!-- 向导姓名 -->
         <el-form-item label="向导姓名" prop="name">
           <el-input v-model="queryForm.name" placeholder="请输入向导姓名" class="wid_140"></el-input>
-        </el-form-item> 
+        </el-form-item>
         <!-- 向导昵称 -->
         <el-form-item label="向导昵称" prop="nickname">
           <el-input v-model="queryForm.nickname" placeholder="请输入向导昵称" class="wid_140"></el-input>
-        </el-form-item> 
+        </el-form-item>
         <!-- 上级ID -->
         <el-form-item label="上级ID" prop="up_customid" label-width>
           <el-input v-model="queryForm.up_customid" placeholder="请输入上级ID" class="wid_140"></el-input>
@@ -28,7 +28,7 @@
         <!-- 上级姓名 -->
         <el-form-item label="上级姓名" prop="up_name">
           <el-input v-model="queryForm.up_name" placeholder="请输入上级姓名" class="wid_140"></el-input>
-        </el-form-item>         
+        </el-form-item>
         <!-- 领取日期 -->
         <el-form-item label="领取日期" prop="allTime">
             <el-date-picker
@@ -39,7 +39,7 @@
                 start-placeholder="开始时间"
                 end-placeholder="结束时间">
             </el-date-picker>
-        </el-form-item>                                
+        </el-form-item>
         <!-- 查询 -->
         <el-form-item>
           <el-button type="primary" size="mini" @click="queryData">查询</el-button>
@@ -53,21 +53,21 @@
       <!-- 表格 -->
       <el-table :data="tableData" v-loading="tableLoading" border stripe style="width: 100%">
         <el-table-column prop="customid" label="向导ID"  width></el-table-column>
-        <el-table-column prop="name" label="向导姓名" width=""></el-table-column>       
+        <el-table-column prop="name" label="向导姓名" width=""></el-table-column>
         <el-table-column prop="nickname" label="向导昵称" width=""></el-table-column>
         <el-table-column prop="up_customid" label="上级ID" width></el-table-column>
-        <el-table-column prop="up_name" label="上级姓名" width></el-table-column>        
-        <!-- 时间 createtime-->
-        <el-table-column prop="createtime" label="时间" :show-overflow-tooltip="true" width></el-table-column>
+        <el-table-column prop="up_name" label="上级姓名" width></el-table-column>
+        <!-- 时间 account_instant_day-->
+        <el-table-column prop="account_instant_day" label="领取时间" :show-overflow-tooltip="true" width></el-table-column>
         <!-- 领取金额 amount-->
         <el-table-column prop="amount" label="领取金额(元)" width></el-table-column>
-        <!-- 备注 task_sub_type 1机构任务签到红包 2机构任务助力红包--> 
+        <!-- 备注 task_sub_type 1机构任务签到红包 2机构任务助力红包-->
         <el-table-column prop="amount" label="备注" width>
             <template slot-scope="scope">
                 <span v-if="scope.row.task_sub_type == '1'">签到红包</span>
                 <span v-else-if="scope.row.task_sub_type == '2'">助力红包</span>
             </template>
-        </el-table-column>              
+        </el-table-column>
       </el-table>
       <!-- 分页 -->
       <div class="block mar_t10">
@@ -80,7 +80,7 @@
         ></el-pagination>
       </div>
     </div>
-    
+
   </div>
 </template>
 <script>
@@ -106,18 +106,18 @@ export default {
         callback();
       }
     };
-    
-    return {     
+
+    return {
       roleId: "",
-      _signInUserId:'',           
+      _signInUserId:'',
       // 主列表
       tableLoading: false,
-      tableData: [],            
+      tableData: [],
       // 分页
       pageTotal: 0,
       currentPage: 1,
       // 查询参数
-      queryForm: {        
+      queryForm: {
         // 向导昵称
         nickname:'',
         // 上级姓名 上级id
@@ -132,25 +132,25 @@ export default {
         // 结束时间
         endTime:'',
         // 开始时间
-        startTime:'',                                                              
-      },           
-            
+        startTime:'',
+      },
+
     };
   },
   created() {
     // 初始化roleId
-    this.roleId = this.$store.getters.roleId;           
+    this.roleId = this.$store.getters.roleId;
     // 初始化 主列表
     this.getTableDataList(1);
   },
   methods: {
-    
+
     // 获取主列表
     getTableDataList(pageNum) {
       let param = {
         data: {
             // 公有
-            signInUserId: this.$store.getters.userId,       
+            signInUserId: this.$store.getters.userId,
             pageNum: pageNum,
             pageSize: 10,
             // 私有
@@ -172,7 +172,7 @@ export default {
         )
         .then(res => {
           if (res.data.code == "0000") {
-            
+
             this.tableData = res.data.data.redEnvelopeRecordList;
             // 分页总数
             this.pageTotal = res.data.data.page.pageTotal;
@@ -180,19 +180,19 @@ export default {
           }
         })
         .catch(err => {});
-    },   
+    },
     // 查询按钮
     queryData() {
       // console.log(this.queryForm)
       // 根据参数进行查询
-     
+
       if(typeof this.queryForm.allTime != 'string'){
           if(this.queryForm.allTime.length > 0){
             // 修正 开始 和结束 时间
             this.queryForm.startTime = this.queryForm.allTime[0]
             this.queryForm.endTime = this.queryForm.allTime[1]
         }
-      }        
+      }
         this.getTableDataList(1);
     },
     // 重置按钮
@@ -207,11 +207,11 @@ export default {
     handle_refresh() {
       this.getTableDataList(1);
       this.currentPage = 1;
-    },        
+    },
     // 机构状态change事件
     changeOption_traveler_status(e) {
       console.log(e);
-    },    
+    },
     // 提示信息 message:提示信息   type 提示类型
     m_message(message, type) {
       this.$message({
@@ -232,14 +232,14 @@ export default {
         }
       });
       return flag;
-    },   
+    },
     // 分页
     handleCurrentChange(val) {
       this.currentPage = val;
       // 获取单前页数据列表
       this.getTableDataList(val);
     },
-    
+
   }
 };
 </script>
