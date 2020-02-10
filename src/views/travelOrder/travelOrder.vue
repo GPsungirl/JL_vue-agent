@@ -235,11 +235,12 @@ export default {
             this.queryForm.endTime = this.queryForm.allTime[1]
             // console.log(this.queryForm)
             this.getTabelDataList(1);
+            this.currentPage = 1
         },
         // 刷新
         handle_refresh(){
-            this.getTabelDataList(1)
-            this.currentPage = 1
+            this.getTabelDataList(this.currentPage)
+            // this.currentPage = 1
         },
         // 重置按钮
         resetData(formName){

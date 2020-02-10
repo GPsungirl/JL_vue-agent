@@ -122,7 +122,7 @@ const fya_routerMap = {
   agentDetails: () => import('@/views/agentDetails/agentDetails'), //机构详情
   subordinateAgent: () => import('@/views/subordinateAgent/subordinateAgent'), // 机构下属查询
   travelerCheck: () => import('@/views/travelerCheck/travelerCheck'), // 角落向导审核
-
+  
   // 财务管理       finance
   virtualProfit: () => import('@/views/virtualProfit/virtualProfit'), //贝壳收益
   accountProfit: () => import('@/views/accountProfit/accountProfit'), // 其他收益

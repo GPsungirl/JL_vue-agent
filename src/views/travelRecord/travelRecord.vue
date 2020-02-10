@@ -803,6 +803,7 @@ export default {
       // console.log(this.queryForm)
       // 根据参数进行查询
       this.getTableDataList(1);
+      this.currentPage = 1
     },
     // 重置按钮
     resetData(formName) {
@@ -812,8 +813,8 @@ export default {
     },
     // 刷新按钮
     handle_refresh() {
-      this.getTableDataList(1);
-      this.currentPage = 1;
+      this.getTableDataList(this.currentPage);
+      // this.currentPage = 1;
     },
     // 初始化 银行信息
     getBankList() {

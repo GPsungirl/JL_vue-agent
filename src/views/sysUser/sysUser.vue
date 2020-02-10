@@ -481,9 +481,9 @@ export default {
     // 刷新界面(目前刷新 数据列表)
     refreshData() {
       // 初始化数据列表
-      this.getList_user(1);
+      this.getList_user(this.currentPage);
       // 分页 回到第一页
-      this.currentPage = 1;
+      //this.currentPage = 1;
     },
     // 新增按钮 (点击《新增用户权限》)
     async handle_addUser() {

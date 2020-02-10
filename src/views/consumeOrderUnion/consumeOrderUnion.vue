@@ -222,6 +222,7 @@ export default {
             this.queryForm.endTime = this.queryForm.businessTime[1]
 
             this.getTabelDataList(1);
+            this.currentPage = 1
         },
         // 重置按钮
         resetData(formName){

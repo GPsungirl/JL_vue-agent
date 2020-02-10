@@ -836,7 +836,9 @@ export default {
     queryData() {
       // console.log(this.queryForm)
       // 根据参数进行查询
+
       this.getTableDataList(1);
+      this.currentPage = 1
     },
     // 刷新 审核视频的dialog列表
     refresh_examineTableData() {
@@ -873,12 +875,13 @@ export default {
     },
     // 刷新按钮
     handle_refresh() {
-      this.getTableDataList(1);
-      this.currentPage = 1;
+      console.log(this.currentPage)
+      this.getTableDataList(this.currentPage);
+
     },
     // 上级姓名操作
     handle_up_name(row) {
-      console.log(row.agentid);
+
       let param = {
         data: {
           up_customid: row.up_customid

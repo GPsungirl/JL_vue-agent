@@ -2,29 +2,29 @@
     <!-- manageAreaAgent.vue 区域机构管理-->
     <div class="pad_5">
         <!-- M1 查询区域 -->
-        <div class="query_fields pad_b_no">                             
+        <div class="query_fields pad_b_no">
             <el-form :inline="true" :model="queryForm" ref="queryForm" size="mini" class="demo-form-inline">
             <!-- 业务地区 -->
             <el-form-item label="业务地区" prop="province_code">
-                <el-select v-model="queryForm.province_code"                         
-                    placeholder="选择省" 
-                    class="wid_140"  
+                <el-select v-model="queryForm.province_code"
+                    placeholder="选择省"
+                    class="wid_140"
                     @change="changeOption_province($event)">
-                    <el-option v-for="(item, index) in queryForm.regions"                             
+                    <el-option v-for="(item, index) in queryForm.regions"
                         :key="index"
                         :label=" item.province "
                         :value=" item.adcode ">
-                    </el-option>                        
+                    </el-option>
                 </el-select>
-                <el-select v-model="queryForm.city_code"                         
-                    placeholder="选择市" 
-                    class="wid_140"  
+                <el-select v-model="queryForm.city_code"
+                    placeholder="选择市"
+                    class="wid_140"
                     >
-                    <el-option v-for="(item, index) in queryForm.cities"                             
+                    <el-option v-for="(item, index) in queryForm.cities"
                         :key="index"
                         :label=" item.city "
                         :value=" item.adcode ">
-                    </el-option>                        
+                    </el-option>
                 </el-select>
             </el-form-item>
             <!-- 合同编号 -->
@@ -34,14 +34,14 @@
             <!-- 机构状态 -->
             <el-form-item label="机构状态" prop="agent_status">
                <el-select v-model="queryForm.agent_status"
-                    class="wid_140"                         
-                    placeholder="选输入机构状态" 
+                    class="wid_140"
+                    placeholder="选输入机构状态"
                     >
-                    <el-option v-for="(item, index) in queryForm.agent_statuss"                             
+                    <el-option v-for="(item, index) in queryForm.agent_statuss"
                         :key="index"
                         :label=" item.value "
                         :value=" item.id ">
-                    </el-option>                        
+                    </el-option>
                 </el-select>
             </el-form-item>
             <!-- 机构名称 -->
@@ -58,8 +58,8 @@
             </el-form-item>
             <!-- 查询 -->
             <el-form-item>
-                <el-button type="primary" size='mini' @click="queryData">查询</el-button>                  
-                <el-button type="success" size='mini' @click="resetData('queryForm')">重置</el-button>                  
+                <el-button type="primary" size='mini' @click="queryData">查询</el-button>
+                <el-button type="success" size='mini' @click="resetData('queryForm')">重置</el-button>
             </el-form-item>
             </el-form>
         </div>
@@ -84,24 +84,24 @@
                 <el-table-column prop="state" label="状态" width="">
                 </el-table-column>
                 <el-table-column prop="" label="操作" width="">
-                <template slot-scope="scope">              
+                <template slot-scope="scope">
                     <el-button @click="handle_detail(scope.row)" type="text" size="small">详情</el-button>
                     <el-button @click="handle_frozen(scope.row)" type="text" size="small">冻结</el-button>
                 </template>
                 </el-table-column>
             </el-table>
             <!-- 分页 -->
-            <div class="block mar_t10">  
-                <el-pagination                
+            <div class="block mar_t10">
+                <el-pagination
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :total="pageTotal"                      
+                :total="pageTotal"
                 background
                 layout="total, prev, pager, next, jumper"
                 >
                 </el-pagination>
             </div>
-        </div>        
+        </div>
     </div>
 </template>
 <script>
@@ -116,7 +116,7 @@ export default {
             // 主列表
             tableLoading:false,
             tableData:[],
-            // 分页          
+            // 分页
             pageTotal: 100,
             currentPage:1,
             // 查询参数
@@ -141,14 +141,14 @@ export default {
                 ],
                 // 机构名称  机构状态  联系人   合同编号 电话
                 province_code:'',
-                city_code: '',                                    
+                city_code: '',
                 agent_name:'',
                 agent_status:'',
                 charger:'',
                 contract_no:'',
-                phone:'',                           
+                phone:'',
             },
-            
+
         }
     },
     created(){
@@ -159,7 +159,7 @@ export default {
         // 初始化 主列表数据
         this.getTableDataList(1)
     },
-    methods:{  
+    methods:{
         // 初始化 主列表数据
         getTableDataList(pageNum){
             let param = {
@@ -171,19 +171,19 @@ export default {
                     pageSize: 10,
                     // 私有参数
                     // 机构名称  机构状态  联系人   合同编号 电话
-                    province_code:this.queryForm.province_code,                    
-                    city_code: this.queryForm.city_code,                                    
+                    province_code:this.queryForm.province_code,
+                    city_code: this.queryForm.city_code,
                     agent_name:this.queryForm.agent_name,
                     agent_status:this.queryForm.agent_status,
                     charger:this.queryForm.charger,
                     contract_no:this.queryForm.contract_no,
-                    phone:this.queryForm.phone,                               
+                    phone:this.queryForm.phone,
                 }
             }
             this.tableLoading = true
             this.$http.post(`${ commonUrl.baseUrl }/agent/getManageAreaAgent`, param).then(res=>{
                 if(res.data.code == '0000'){
-                    console.log(res)                    
+                    console.log(res)
                     this.tableData = res.data.data.agentList
                     // 分页总数
                     this.pageTotal = res.data.data.page.pageTotal;
@@ -195,20 +195,21 @@ export default {
 
         } ,
         // 查询按钮
-        queryData(){            
+        queryData(){
             this.getTableDataList(1);
+            this.currentPage = 1
         },
-        // 重置查询条件         
+        // 重置查询条件
         resetData(formName){
             this.city_code = ''
-            this.$refs[formName].resetFields();            
-        },    
+            this.$refs[formName].resetFields();
+        },
         // 省份change事件
-        changeOption_province(e){                          
+        changeOption_province(e){
             // 赋值cities (先清理 后赋值)
-            this.queryForm.cities = [];           
-            this.queryCity(provinces.province_list[e]);            
-        },              
+            this.queryForm.cities = [];
+            this.queryCity(provinces.province_list[e]);
+        },
         // 查 市区 txt: String 省份名
         queryCity(txt){
             let vm = this
@@ -217,23 +218,23 @@ export default {
                 // console.log(result);
                 // 查询成功时，result即为对应的行政区信息
                 for(let item of result.districtList[0].districtList){
-                    vm.queryForm.cities.push({ 
+                    vm.queryForm.cities.push({
                         adcode:item.adcode,
-                        city  :item.name                             
+                        city  :item.name
                      })
-                }               
+                }
             })
         },
-        // 分页        
+        // 分页
         handleCurrentChange(val){
-            this.currentPage = val       
-            // 获取主页列表数据(loading状态) 
-            this.getTableDataList(val)          
+            this.currentPage = val
+            // 获取主页列表数据(loading状态)
+            this.getTableDataList(val)
             //console.log(`当前页: ${val}`);
         },
         // 初始化 地图
         initMap(){
-            let vm = this 
+            let vm = this
             //利用高德地图API 获取 所有省
             AMap.plugin('AMap.DistrictSearch', function () {
                 vm.districtSearch = new AMap.DistrictSearch({
@@ -241,7 +242,7 @@ export default {
                     level: 'country',
                     //  显示下级行政区级数，1表示返回下一级行政区
                     subdistrict: 1
-                })                               
+                })
             })
         },
         // 初始化 省份数据
@@ -252,11 +253,11 @@ export default {
                 arr.push({
                     adcode:i,
                     province:provinces.province_list[i]
-                })                
-            }            
+                })
+            }
             this.queryForm.regions = arr
-            
-        }, 
+
+        },
     }
 }
 </script>

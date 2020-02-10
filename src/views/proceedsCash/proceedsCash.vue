@@ -232,8 +232,8 @@ export default {
         },
         // 刷新
         handle_refresh(){
-            this.getTabelDataList(1)
-            this.currentPage = 1
+            this.getTabelDataList(this.currentPage)
+
         },
         // 导出数据
         exportData(){
@@ -276,6 +276,7 @@ export default {
             }
 
             this.getTabelDataList(1);
+            this.currentPage = 1
         },
         // 重置按钮
         resetData(formName){

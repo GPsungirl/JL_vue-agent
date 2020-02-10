@@ -248,6 +248,7 @@ export default {
             }
             console.log(param)
             this.getTableDataList(1);
+            this.currentPage = 1
         },
         // 重置按钮
         resetData(){

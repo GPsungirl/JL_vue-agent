@@ -274,9 +274,9 @@ export default {
     // 刷新
     refreshData(){
       // 初始化数据列表
-      this.getList_userPermission(1);
+      this.getList_userPermission(this.currentPage);
       // 回到第一页数据
-      this.currentPage = 1
+      //this.currentPage = 1
     },
     // 主列表（获取所有用户权限管理列表)
     async getList_userPermission(pageNum) {
