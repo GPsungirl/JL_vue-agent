@@ -145,8 +145,7 @@
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
-      class="travel_record"
-    >
+      class="travel_record">
       <!-- 业务信息 -->
       <div>
         <!-- 表头 -->
@@ -166,8 +165,7 @@
           v-loading="detail_tableLoading"
           border
           stripe
-          style="width: 100%"
-        >
+          style="width: 100%">
           <el-table-column prop label="开始工作时间" width>
             <template
               slot-scope="scope"
@@ -205,16 +203,14 @@
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
-      class="agent_detail"
-    >
+      class="agent_detail">
       <!-- 业务信息 -->
       <el-form
         :inline="true"
         :model="agent_detail_form"
         class="demo-form-inline"
         label-width="68px"
-        disabled
-      >
+        disabled>
         <!-- 业务信息 -->
 
         <el-form-item label="机构名称" prop="agent_name">
@@ -355,8 +351,7 @@
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
-      class="agent_detail"
-    >
+      class="agent_detail">
       <!-- 业务信息 -->
       <el-form
         :inline="true"

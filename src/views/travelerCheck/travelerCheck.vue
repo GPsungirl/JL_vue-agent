@@ -1215,7 +1215,7 @@ export default {
           this.detail_loading = true
           this.$http.post(`${ commonUrl.baseUrl }/travelerInfo/selectTravelerInfo`, {data:{customid:row.customid}}).then(res=>{
             if(res.data.code == '0000'){
-                console.log(res)
+                
                 let result = res.data.data.travelerInfo
                 // console.log(result)
                 // 向导姓名
